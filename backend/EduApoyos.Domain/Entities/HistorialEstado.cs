@@ -1,3 +1,4 @@
+using EduApoyos.Domain.Common.Errors;
 using EduApoyos.Domain.Enums;
 
 namespace EduApoyos.Domain.Entities;
@@ -20,7 +21,7 @@ public class HistorialEstado
     public HistorialEstado(Guid solicitudId, Guid usuarioId, EstadoSolicitud anterior, EstadoSolicitud nuevo, string observacion)
     {
         if (anterior == nuevo)
-            throw new InvalidOperationException("El estado nuevo debe ser diferente al estado anterior.");
+            throw new InvalidOperationException(DomainErrors.HistorialEstado.SinCambioDeEstado.Message);
 
         Id = Guid.NewGuid();
         SolicitudId = solicitudId;

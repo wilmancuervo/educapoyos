@@ -1,7 +1,7 @@
 using EduApoyos.Domain.Entities;
 using EduApoyos.Domain.Enums;
 
-namespace EduApoyos.Application.Interfaces;
+namespace EduApoyos.Domain.Interfaces;
 
 public interface ISolicitudApoyoRepository : IRepository<SolicitudApoyo>
 {

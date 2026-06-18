@@ -1,3 +1,5 @@
+using EduApoyos.Domain.Common;
+using EduApoyos.Domain.Common.Errors;
 using EduApoyos.Domain.Enums;
 
 namespace EduApoyos.Domain.Entities;
@@ -18,35 +20,40 @@ public class SolicitudApoyo
     public Usuario? Asesor { get; private set; }
     public ICollection<HistorialEstado> Historial { get; private set; } = [];
 
-    public void AsignarAsesor(Guid asesorId)
+    public bool PerteneceA(Guid estudianteId) => EstudianteId == estudianteId;
+
+    public Result AsignarAsesor(Guid asesorId)
     {
         if (Estado != EstadoSolicitud.Pendiente)
-            throw new InvalidOperationException("Solo se puede asignar asesor a solicitudes en estado Pendiente.");
+            return Result.Failure(DomainErrors.Solicitud.EstadoInvalidoParaAsignar);
 
         if (asesorId == Guid.Empty)
-            throw new ArgumentException("El asesor no es válido.");
+            return Result.Failure(DomainErrors.Solicitud.AsesorInvalido);
 
         AsesorId = asesorId;
         Estado = EstadoSolicitud.EnRevision;
         FechaActualizacion = DateTime.UtcNow;
+        return Result.Success();
     }
 
-    public void Aprobar()
+    public Result Aprobar()
     {
         if (Estado != EstadoSolicitud.EnRevision)
-            throw new InvalidOperationException("Solo se pueden aprobar solicitudes en estado En Revisión.");
+            return Result.Failure(DomainErrors.Solicitud.EstadoInvalidoParaAprobar);
 
         Estado = EstadoSolicitud.Aprobada;
         FechaActualizacion = DateTime.UtcNow;
+        return Result.Success();
     }
 
-    public void Rechazar()
+    public Result Rechazar()
     {
         if (Estado != EstadoSolicitud.EnRevision)
-            throw new InvalidOperationException("Solo se pueden rechazar solicitudes en estado En Revisión.");
+            return Result.Failure(DomainErrors.Solicitud.EstadoInvalidoParaRechazar);
 
         Estado = EstadoSolicitud.Rechazada;
         FechaActualizacion = DateTime.UtcNow;
+        return Result.Success();
     }
 
     protected SolicitudApoyo() { }

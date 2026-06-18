@@ -1,6 +1,6 @@
 using EduApoyos.Domain.Entities;
 
-namespace EduApoyos.Application.Interfaces;
+namespace EduApoyos.Domain.Interfaces;
 
 public interface IEstudianteRepository : IRepository<Estudiante>
 {
