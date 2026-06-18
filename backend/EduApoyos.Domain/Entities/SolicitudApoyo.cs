@@ -20,6 +20,12 @@ public class SolicitudApoyo
 
     public void AsignarAsesor(Guid asesorId)
     {
+        if (Estado != EstadoSolicitud.Pendiente)
+            throw new InvalidOperationException("Solo se puede asignar asesor a solicitudes en estado Pendiente.");
+
+        if (asesorId == Guid.Empty)
+            throw new ArgumentException("El asesor no es válido.");
+
         AsesorId = asesorId;
         Estado = EstadoSolicitud.EnRevision;
         FechaActualizacion = DateTime.UtcNow;
@@ -27,12 +33,18 @@ public class SolicitudApoyo
 
     public void Aprobar()
     {
+        if (Estado != EstadoSolicitud.EnRevision)
+            throw new InvalidOperationException("Solo se pueden aprobar solicitudes en estado En Revisión.");
+
         Estado = EstadoSolicitud.Aprobada;
         FechaActualizacion = DateTime.UtcNow;
     }
 
     public void Rechazar()
     {
+        if (Estado != EstadoSolicitud.EnRevision)
+            throw new InvalidOperationException("Solo se pueden rechazar solicitudes en estado En Revisión.");
+
         Estado = EstadoSolicitud.Rechazada;
         FechaActualizacion = DateTime.UtcNow;
     }

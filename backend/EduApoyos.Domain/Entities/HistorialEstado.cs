@@ -19,6 +19,9 @@ public class HistorialEstado
 
     public HistorialEstado(Guid solicitudId, Guid usuarioId, EstadoSolicitud anterior, EstadoSolicitud nuevo, string observacion)
     {
+        if (anterior == nuevo)
+            throw new InvalidOperationException("El estado nuevo debe ser diferente al estado anterior.");
+
         Id = Guid.NewGuid();
         SolicitudId = solicitudId;
         UsuarioId = usuarioId;
