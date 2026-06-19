@@ -1,5 +1,6 @@
 using System.Text;
 using EduApoyos.API.Middleware;
+using EduApoyos.API.Swagger;
 using EduApoyos.Application;
 using EduApoyos.Infrastructure;
 using EduApoyos.Infrastructure.Persistence;
@@ -35,7 +36,13 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "EduApoyos API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "EduApoyos API",
+        Version = "v1",
+        Description = "API para la gestión de solicitudes de apoyo económico (becas y créditos)."
+    });
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -43,8 +50,9 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Ingrese el token JWT"
+        Description = "Ingrese el token JWT obtenido en /api/auth/login"
     });
+
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -55,6 +63,11 @@ builder.Services.AddSwaggerGen(options =>
             []
         }
     });
+
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+    options.OperationFilter<AuthResponsesOperationFilter>();
 });
 
 var app = builder.Build();
