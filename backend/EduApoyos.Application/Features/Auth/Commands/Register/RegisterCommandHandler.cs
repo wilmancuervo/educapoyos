@@ -35,12 +35,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Au
 
         var token = _jwtService.GenerarToken(usuario);
 
-        return Result.Success(new AuthResponseDto
-        {
-            Token = token,
-            NombreCompleto = usuario.NombreCompleto,
-            Email = usuario.Email,
-            Rol = usuario.Rol.ToString()
-        });
+        return Result.Success(AuthResponseDto.FromEntity(usuario, token));
     }
 }

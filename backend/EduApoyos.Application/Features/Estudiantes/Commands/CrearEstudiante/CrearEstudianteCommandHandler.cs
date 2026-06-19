@@ -33,16 +33,6 @@ public class CrearEstudianteCommandHandler : IRequestHandler<CrearEstudianteComm
         await _estudianteRepository.AddAsync(estudiante);
         await _estudianteRepository.SaveChangesAsync();
 
-        return Result.Success(new EstudianteDto
-        {
-            Id = estudiante.Id,
-            UsuarioId = estudiante.UsuarioId,
-            NombreCompleto = usuario.NombreCompleto,
-            Email = usuario.Email,
-            NumeroDocumento = estudiante.NumeroDocumento,
-            TipoDocumento = estudiante.TipoDocumento.ToString(),
-            ProgramaAcademico = estudiante.ProgramaAcademico,
-            Semestre = estudiante.Semestre
-        });
+        return Result.Success(EstudianteDto.FromEntity(estudiante));
     }
 }

@@ -18,17 +18,7 @@ public class ListarEstudiantesQueryHandler : IRequestHandler<ListarEstudiantesQu
     {
         var (items, total) = await _estudianteRepository.GetPagedAsync(request.Page, request.PageSize);
 
-        var dtos = items.Select(e => new EstudianteDto
-        {
-            Id = e.Id,
-            UsuarioId = e.UsuarioId,
-            NombreCompleto = e.Usuario.NombreCompleto,
-            Email = e.Usuario.Email,
-            NumeroDocumento = e.NumeroDocumento,
-            TipoDocumento = e.TipoDocumento.ToString(),
-            ProgramaAcademico = e.ProgramaAcademico,
-            Semestre = e.Semestre
-        });
+        var dtos = items.Select(EstudianteDto.FromEntity);
 
         return new PagedResultDto<EstudianteDto>
         {

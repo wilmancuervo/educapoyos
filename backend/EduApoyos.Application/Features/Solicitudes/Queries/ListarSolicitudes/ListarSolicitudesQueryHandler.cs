@@ -18,19 +18,7 @@ public class ListarSolicitudesQueryHandler : IRequestHandler<ListarSolicitudesQu
     {
         var (items, total) = await _solicitudRepository.GetPagedAsync(request.Page, request.PageSize, request.Estado, request.Tipo, request.Desde, request.Hasta);
 
-        var dtos = items.Select(s => new SolicitudDto
-        {
-            Id = s.Id,
-            EstudianteId = s.EstudianteId,
-            NombreEstudiante = s.Estudiante.Usuario.NombreCompleto,
-            TipoApoyo = s.TipoApoyo.ToString(),
-            MontoSolicitado = s.MontoSolicitado,
-            Descripcion = s.Descripcion,
-            Estado = s.Estado.ToString(),
-            FechaSolicitud = s.FechaSolicitud,
-            FechaActualizacion = s.FechaActualizacion,
-            NombreAsesor = s.Asesor?.NombreCompleto
-        });
+        var dtos = items.Select(SolicitudDto.FromEntity);
 
         return new PagedResultDto<SolicitudDto>
         {

@@ -31,12 +31,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
 
         var token = _jwtService.GenerarToken(usuario);
 
-        return Result.Success(new AuthResponseDto
-        {
-            Token = token,
-            NombreCompleto = usuario.NombreCompleto,
-            Email = usuario.Email,
-            Rol = usuario.Rol.ToString()
-        });
+        return Result.Success(AuthResponseDto.FromEntity(usuario, token));
     }
 }

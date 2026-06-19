@@ -20,6 +20,8 @@ public class SolicitudApoyoRepository : Repository<SolicitudApoyo>, ISolicitudAp
     public async Task<IEnumerable<SolicitudApoyo>> GetByEstudianteIdAsync(Guid estudianteId) =>
         await _dbSet
             .Where(s => s.EstudianteId == estudianteId)
+            .Include(s => s.Estudiante).ThenInclude(e => e.Usuario)
+            .Include(s => s.Asesor)
             .Include(s => s.Historial)
             .OrderByDescending(s => s.FechaSolicitud)
             .ToListAsync();

@@ -29,17 +29,6 @@ public class CrearSolicitudCommandHandler : IRequestHandler<CrearSolicitudComman
         await _solicitudRepository.AddAsync(solicitud);
         await _solicitudRepository.SaveChangesAsync();
 
-        return Result.Success(new SolicitudDto
-        {
-            Id = solicitud.Id,
-            EstudianteId = solicitud.EstudianteId,
-            NombreEstudiante = estudiante.Usuario.NombreCompleto,
-            TipoApoyo = solicitud.TipoApoyo.ToString(),
-            MontoSolicitado = solicitud.MontoSolicitado,
-            Descripcion = solicitud.Descripcion,
-            Estado = solicitud.Estado.ToString(),
-            FechaSolicitud = solicitud.FechaSolicitud,
-            FechaActualizacion = solicitud.FechaActualizacion
-        });
+        return Result.Success(SolicitudDto.FromEntity(solicitud));
     }
 }

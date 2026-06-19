@@ -10,7 +10,9 @@ public class EstudianteRepository : Repository<Estudiante>, IEstudianteRepositor
     public EstudianteRepository(AppDbContext context) : base(context) { }
 
     public async Task<Estudiante?> GetByUsuarioIdAsync(Guid usuarioId) =>
-        await _dbSet.FirstOrDefaultAsync(e => e.UsuarioId == usuarioId);
+        await _dbSet
+            .Include(e => e.Usuario)
+            .FirstOrDefaultAsync(e => e.UsuarioId == usuarioId);
 
     public async Task<(IEnumerable<Estudiante> Items, int Total)> GetPagedAsync(int page, int pageSize)
     {

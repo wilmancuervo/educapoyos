@@ -1,3 +1,5 @@
+using EduApoyos.Domain.Entities;
+
 namespace EduApoyos.Application.DTOs.Solicitudes;
 
 public class SolicitudDto
@@ -12,4 +14,18 @@ public class SolicitudDto
     public DateTime FechaSolicitud { get; set; }
     public DateTime FechaActualizacion { get; set; }
     public string? NombreAsesor { get; set; }
+
+    public static SolicitudDto FromEntity(SolicitudApoyo solicitud) => new()
+    {
+        Id = solicitud.Id,
+        EstudianteId = solicitud.EstudianteId,
+        NombreEstudiante = solicitud.Estudiante.Usuario.NombreCompleto,
+        TipoApoyo = solicitud.TipoApoyo.ToString(),
+        MontoSolicitado = solicitud.MontoSolicitado,
+        Descripcion = solicitud.Descripcion,
+        Estado = solicitud.Estado.ToString(),
+        FechaSolicitud = solicitud.FechaSolicitud,
+        FechaActualizacion = solicitud.FechaActualizacion,
+        NombreAsesor = solicitud.Asesor?.NombreCompleto
+    };
 }

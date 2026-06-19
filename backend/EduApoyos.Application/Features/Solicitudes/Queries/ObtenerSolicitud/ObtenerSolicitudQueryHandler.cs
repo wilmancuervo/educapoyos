@@ -32,32 +32,6 @@ public class ObtenerSolicitudQueryHandler : IRequestHandler<ObtenerSolicitudQuer
                 return Result.Failure<SolicitudDetalleDto>(DomainErrors.Solicitud.AccesoDenegado);
         }
 
-        var dto = new SolicitudDetalleDto
-        {
-            Id = solicitud.Id,
-            EstudianteId = solicitud.EstudianteId,
-            NombreEstudiante = solicitud.Estudiante.Usuario.NombreCompleto,
-            EmailEstudiante = solicitud.Estudiante.Usuario.Email,
-            ProgramaAcademico = solicitud.Estudiante.ProgramaAcademico,
-            Semestre = solicitud.Estudiante.Semestre,
-            TipoApoyo = solicitud.TipoApoyo.ToString(),
-            MontoSolicitado = solicitud.MontoSolicitado,
-            Descripcion = solicitud.Descripcion,
-            Estado = solicitud.Estado.ToString(),
-            FechaSolicitud = solicitud.FechaSolicitud,
-            FechaActualizacion = solicitud.FechaActualizacion,
-            AsesorId = solicitud.AsesorId,
-            NombreAsesor = solicitud.Asesor?.NombreCompleto,
-            Historial = solicitud.Historial.OrderBy(h => h.FechaCambio).Select(h => new HistorialEstadoDto
-            {
-                EstadoAnterior = h.EstadoAnterior.ToString(),
-                EstadoNuevo = h.EstadoNuevo.ToString(),
-                Observacion = h.Observacion,
-                NombreUsuario = h.Usuario.NombreCompleto,
-                FechaCambio = h.FechaCambio
-            })
-        };
-
-        return Result.Success(dto);
+        return Result.Success(SolicitudDetalleDto.FromEntity(solicitud));
     }
 }

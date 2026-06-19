@@ -25,20 +25,6 @@ public class ListarSolicitudesEstudianteQueryHandler : IRequestHandler<ListarSol
 
         var solicitudes = await _solicitudRepository.GetByEstudianteIdAsync(estudiante.Id);
 
-        var dtos = solicitudes.Select(s => new SolicitudDto
-        {
-            Id = s.Id,
-            EstudianteId = s.EstudianteId,
-            NombreEstudiante = estudiante.Usuario.NombreCompleto,
-            TipoApoyo = s.TipoApoyo.ToString(),
-            MontoSolicitado = s.MontoSolicitado,
-            Descripcion = s.Descripcion,
-            Estado = s.Estado.ToString(),
-            FechaSolicitud = s.FechaSolicitud,
-            FechaActualizacion = s.FechaActualizacion,
-            NombreAsesor = s.Asesor?.NombreCompleto
-        });
-
-        return Result.Success(dtos);
+        return Result.Success(solicitudes.Select(SolicitudDto.FromEntity));
     }
 }

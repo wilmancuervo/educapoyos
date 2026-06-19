@@ -1,3 +1,5 @@
+using EduApoyos.Domain.Entities;
+
 namespace EduApoyos.Application.DTOs.Solicitudes;
 
 public class SolicitudDetalleDto
@@ -17,6 +19,25 @@ public class SolicitudDetalleDto
     public Guid? AsesorId { get; set; }
     public string? NombreAsesor { get; set; }
     public IEnumerable<HistorialEstadoDto> Historial { get; set; } = [];
+
+    public static SolicitudDetalleDto FromEntity(SolicitudApoyo solicitud) => new()
+    {
+        Id = solicitud.Id,
+        EstudianteId = solicitud.EstudianteId,
+        NombreEstudiante = solicitud.Estudiante.Usuario.NombreCompleto,
+        EmailEstudiante = solicitud.Estudiante.Usuario.Email,
+        ProgramaAcademico = solicitud.Estudiante.ProgramaAcademico,
+        Semestre = solicitud.Estudiante.Semestre,
+        TipoApoyo = solicitud.TipoApoyo.ToString(),
+        MontoSolicitado = solicitud.MontoSolicitado,
+        Descripcion = solicitud.Descripcion,
+        Estado = solicitud.Estado.ToString(),
+        FechaSolicitud = solicitud.FechaSolicitud,
+        FechaActualizacion = solicitud.FechaActualizacion,
+        AsesorId = solicitud.AsesorId,
+        NombreAsesor = solicitud.Asesor?.NombreCompleto,
+        Historial = solicitud.Historial.OrderBy(h => h.FechaCambio).Select(HistorialEstadoDto.FromEntity)
+    };
 }
 
 public class HistorialEstadoDto
@@ -26,4 +47,13 @@ public class HistorialEstadoDto
     public string Observacion { get; set; } = string.Empty;
     public string NombreUsuario { get; set; } = string.Empty;
     public DateTime FechaCambio { get; set; }
+
+    public static HistorialEstadoDto FromEntity(HistorialEstado historial) => new()
+    {
+        EstadoAnterior = historial.EstadoAnterior.ToString(),
+        EstadoNuevo = historial.EstadoNuevo.ToString(),
+        Observacion = historial.Observacion,
+        NombreUsuario = historial.Usuario.NombreCompleto,
+        FechaCambio = historial.FechaCambio
+    };
 }
