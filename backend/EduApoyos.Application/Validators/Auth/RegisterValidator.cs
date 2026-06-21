@@ -1,10 +1,9 @@
-using EduApoyos.Application.DTOs.Auth;
-using EduApoyos.Domain.Enums;
+using EduApoyos.Application.Features.Auth.Commands.Register;
 using FluentValidation;
 
 namespace EduApoyos.Application.Validators.Auth;
 
-public class RegisterValidator : AbstractValidator<RegisterDto>
+public class RegisterValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterValidator()
     {

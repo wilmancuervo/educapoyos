@@ -1,9 +1,9 @@
-using EduApoyos.Application.DTOs.Solicitudes;
+using EduApoyos.Application.Features.Solicitudes.Commands.CambiarEstado;
 using FluentValidation;
 
 namespace EduApoyos.Application.Validators.Solicitudes;
 
-public class CambiarEstadoValidator : AbstractValidator<CambiarEstadoDto>
+public class CambiarEstadoValidator : AbstractValidator<CambiarEstadoCommand>
 {
     private static readonly string[] AccionesValidas = ["aprobar", "rechazar"];
 

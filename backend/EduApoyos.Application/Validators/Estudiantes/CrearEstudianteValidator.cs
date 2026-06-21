@@ -1,9 +1,9 @@
-using EduApoyos.Application.DTOs.Estudiantes;
+using EduApoyos.Application.Features.Estudiantes.Commands.CrearEstudiante;
 using FluentValidation;
 
 namespace EduApoyos.Application.Validators.Estudiantes;
 
-public class CrearEstudianteValidator : AbstractValidator<CrearEstudianteDto>
+public class CrearEstudianteValidator : AbstractValidator<CrearEstudianteCommand>
 {
     public CrearEstudianteValidator()
     {

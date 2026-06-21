@@ -1,9 +1,9 @@
-using EduApoyos.Application.DTOs.Auth;
+using EduApoyos.Application.Features.Auth.Commands.Login;
 using FluentValidation;
 
 namespace EduApoyos.Application.Validators.Auth;
 
-public class LoginValidator : AbstractValidator<LoginDto>
+public class LoginValidator : AbstractValidator<LoginCommand>
 {
     public LoginValidator()
     {

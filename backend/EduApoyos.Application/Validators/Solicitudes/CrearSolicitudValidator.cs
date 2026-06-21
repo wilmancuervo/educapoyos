@@ -1,9 +1,9 @@
-using EduApoyos.Application.DTOs.Solicitudes;
+using EduApoyos.Application.Features.Solicitudes.Commands.CrearSolicitud;
 using FluentValidation;
 
 namespace EduApoyos.Application.Validators.Solicitudes;
 
-public class CrearSolicitudValidator : AbstractValidator<CrearSolicitudDto>
+public class CrearSolicitudValidator : AbstractValidator<CrearSolicitudCommand>
 {
     public CrearSolicitudValidator()
     {

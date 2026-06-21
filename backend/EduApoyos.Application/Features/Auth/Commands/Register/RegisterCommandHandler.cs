@@ -14,7 +14,10 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Au
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtService _jwtService;
 
-    public RegisterCommandHandler(IUsuarioRepository usuarioRepository, IPasswordHasher passwordHasher, IJwtService jwtService)
+    public RegisterCommandHandler(
+        IUsuarioRepository usuarioRepository,
+        IPasswordHasher passwordHasher,
+        IJwtService jwtService)
     {
         _usuarioRepository = usuarioRepository;
         _passwordHasher = passwordHasher;

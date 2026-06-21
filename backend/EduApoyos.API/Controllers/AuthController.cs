@@ -47,7 +47,8 @@ public class AuthController : AppController
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        var resultado = await _mediator.Send(new RegisterCommand(dto.NombreCompleto, dto.Email, dto.Password, dto.Rol));
+        var resultado = await _mediator.Send(new RegisterCommand(
+            dto.NombreCompleto, dto.Email, dto.Password, dto.Rol));
 
         return Match(resultado, Ok, ConflictError);
     }

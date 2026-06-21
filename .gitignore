@@ -16,6 +16,9 @@
 coveragereport/
 **/TestResults/
 
+# Documentos test
+docs/
+
 # Secretos y configuración local
 **/appsettings.Local.json
 **/appsettings.*.Local.json

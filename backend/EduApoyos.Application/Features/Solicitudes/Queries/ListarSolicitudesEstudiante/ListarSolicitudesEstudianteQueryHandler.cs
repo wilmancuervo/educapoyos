@@ -1,4 +1,3 @@
-using EduApoyos.Application.Common.Errors;
 using EduApoyos.Application.DTOs.Solicitudes;
 using EduApoyos.Domain.Common;
 using EduApoyos.Domain.Interfaces;
@@ -21,7 +20,7 @@ public class ListarSolicitudesEstudianteQueryHandler : IRequestHandler<ListarSol
     {
         var estudiante = await _estudianteRepository.GetByUsuarioIdAsync(request.UsuarioId);
         if (estudiante is null)
-            return Result.Failure<IEnumerable<SolicitudDto>>(ApplicationErrors.Estudiante.NoEncontrado);
+            return Result.Success(Enumerable.Empty<SolicitudDto>());
 
         var solicitudes = await _solicitudRepository.GetByEstudianteIdAsync(estudiante.Id);
 

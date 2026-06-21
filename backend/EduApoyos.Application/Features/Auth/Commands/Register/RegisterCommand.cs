@@ -5,4 +5,9 @@ using MediatR;
 
 namespace EduApoyos.Application.Features.Auth.Commands.Register;
 
-public record RegisterCommand(string NombreCompleto, string Email, string Password, Rol Rol) : IRequest<Result<AuthResponseDto>>;
+public record RegisterCommand(
+    string NombreCompleto,
+    string Email,
+    string Password,
+    Rol Rol
+) : IRequest<Result<AuthResponseDto>>;

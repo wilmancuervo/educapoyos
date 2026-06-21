@@ -1,9 +1,9 @@
-using EduApoyos.Application.DTOs.Solicitudes;
+using EduApoyos.Application.Features.Solicitudes.Commands.AsignarAsesor;
 using FluentValidation;
 
 namespace EduApoyos.Application.Validators.Solicitudes;
 
-public class AsignarAsesorValidator : AbstractValidator<AsignarAsesorDto>
+public class AsignarAsesorValidator : AbstractValidator<AsignarAsesorCommand>
 {
     public AsignarAsesorValidator()
     {
