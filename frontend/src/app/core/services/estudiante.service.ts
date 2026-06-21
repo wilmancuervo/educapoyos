@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse } from '../models/auth.models';
-import { CrearEstudianteRequest, EstudianteDto, NuevoEstudianteForm } from '../models/estudiante.models';
-import { PagedResult } from '../models/solicitud.models';
+import { CrearEstudianteRequest, EstudianteDto, NuevoEstudianteForm, PagedResult } from '../models/estudiante.models';
 
 @Injectable({ providedIn: 'root' })
 export class EstudianteService {

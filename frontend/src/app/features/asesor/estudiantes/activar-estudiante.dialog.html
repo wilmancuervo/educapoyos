@@ -1,0 +1,72 @@
+<h2 mat-dialog-title>Activar Estudiante</h2>
+
+<mat-dialog-content>
+  <div class="usuario-info">
+    <div class="info-row">
+      <span class="info-label">Nombre</span>
+      <span>{{ usuario.nombreCompleto }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Correo</span>
+      <span>{{ usuario.email }}</span>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo de documento</mat-label>
+      <mat-select formControlName="tipoDocumento">
+        @for (t of tiposDocumento; track t.value) {
+          <mat-option [value]="t.value">{{ t.label }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('tipoDocumento')?.touched && form.get('tipoDocumento')?.hasError('required')) {
+        <mat-error>Selecciona un tipo de documento</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Número de documento</mat-label>
+      <input matInput formControlName="numeroDocumento">
+      @if (form.get('numeroDocumento')?.touched && form.get('numeroDocumento')?.hasError('required')) {
+        <mat-error>El número de documento es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Programa académico</mat-label>
+      <input matInput formControlName="programaAcademico">
+      @if (form.get('programaAcademico')?.touched && form.get('programaAcademico')?.hasError('required')) {
+        <mat-error>El programa académico es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Semestre</mat-label>
+      <input matInput type="number" formControlName="semestre">
+      <mat-hint>Entre 1 y 12</mat-hint>
+      @if (form.get('semestre')?.touched) {
+        @if (form.get('semestre')?.hasError('required')) {
+          <mat-error>El semestre es obligatorio</mat-error>
+        } @else if (form.get('semestre')?.hasError('min')) {
+          <mat-error>El semestre mínimo es 1</mat-error>
+        } @else if (form.get('semestre')?.hasError('max')) {
+          <mat-error>El semestre máximo es 12</mat-error>
+        }
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false" type="button">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="activar()" [disabled]="loading">
+    @if (loading) {
+      <mat-spinner diameter="20" />
+    } @else {
+      Activar estudiante
+    }
+  </button>
+</mat-dialog-actions>

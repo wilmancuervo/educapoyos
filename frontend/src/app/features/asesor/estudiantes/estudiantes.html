@@ -18,13 +18,13 @@
         <div class="loading-center">
           <mat-spinner diameter="40" />
         </div>
-      } @else if (resultado().items.length === 0) {
+      } @else if (data().items.length === 0) {
         <div class="empty-state">
           <mat-icon>people_outline</mat-icon>
           <p>No hay estudiantes registrados.</p>
         </div>
       } @else {
-        <table mat-table [dataSource]="resultado().items" class="full-width">
+        <table mat-table [dataSource]="data().items" class="full-width">
 
           <ng-container matColumnDef="nombreCompleto">
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
@@ -38,22 +38,34 @@
 
           <ng-container matColumnDef="tipoDocumento">
             <th mat-header-cell *matHeaderCellDef>Tipo Doc.</th>
-            <td mat-cell *matCellDef="let e">{{ e.tipoDocumento }}</td>
+            <td mat-cell *matCellDef="let e">{{ e.tipoDocumento ?? '—' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="numeroDocumento">
             <th mat-header-cell *matHeaderCellDef>Documento</th>
-            <td mat-cell *matCellDef="let e">{{ e.numeroDocumento }}</td>
+            <td mat-cell *matCellDef="let e">{{ e.numeroDocumento ?? '—' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="programaAcademico">
             <th mat-header-cell *matHeaderCellDef>Programa</th>
-            <td mat-cell *matCellDef="let e">{{ e.programaAcademico }}</td>
+            <td mat-cell *matCellDef="let e">{{ e.programaAcademico ?? '—' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="semestre">
             <th mat-header-cell *matHeaderCellDef>Semestre</th>
-            <td mat-cell *matCellDef="let e">{{ e.semestre }}</td>
+            <td mat-cell *matCellDef="let e">{{ e.semestre ?? '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let e">
+              @if (!tienePerfil(e)) {
+                <button mat-stroked-button color="primary" (click)="completarPerfil(e)">
+                  <mat-icon>how_to_reg</mat-icon>
+                  Registrar
+                </button>
+              }
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="columnas"></tr>
@@ -61,7 +73,7 @@
         </table>
 
         <mat-paginator
-          [length]="resultado().total"
+          [length]="data().total"
           [pageSize]="pageSize"
           [pageIndex]="page - 1"
           [pageSizeOptions]="[5, 10, 25]"

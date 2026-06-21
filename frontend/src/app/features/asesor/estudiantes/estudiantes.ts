@@ -6,11 +6,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { EstudianteService } from '../../../core/services/estudiante.service';
-import { EstudianteDto } from '../../../core/models/estudiante.models';
-import { PagedResult } from '../../../core/models/solicitud.models';
+import { EstudianteDto, PagedResult } from '../../../core/models/estudiante.models';
 import { NuevoEstudianteDialog } from './nuevo-estudiante.dialog';
+import { ActivarEstudianteDialog } from './activar-estudiante.dialog';
+
+const PAGED_INICIAL: PagedResult<EstudianteDto> = {
+  items: [], total: 0, page: 1, pageSize: 10, totalPages: 0,
+};
 
 @Component({
   selector: 'app-estudiantes',
@@ -21,6 +26,7 @@ import { NuevoEstudianteDialog } from './nuevo-estudiante.dialog';
     MatIconModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatChipsModule,
   ],
   templateUrl: './estudiantes.html',
   styleUrl: './estudiantes.scss',
@@ -29,13 +35,17 @@ export class Estudiantes implements OnInit {
   private readonly estudianteService = inject(EstudianteService);
   private readonly dialog = inject(MatDialog);
 
-  readonly columnas = ['nombreCompleto', 'email', 'tipoDocumento', 'numeroDocumento', 'programaAcademico', 'semestre'];
+  readonly columnas = ['nombreCompleto', 'email', 'tipoDocumento', 'numeroDocumento', 'programaAcademico', 'semestre', 'acciones'];
 
-  resultado = signal<PagedResult<EstudianteDto>>({ items: [], total: 0, page: 1, pageSize: 10, totalPages: 0 });
+  data = signal<PagedResult<EstudianteDto>>(PAGED_INICIAL);
   loading = signal(false);
 
   page = 1;
   pageSize = 10;
+
+  tienePerfil(e: EstudianteDto): boolean {
+    return !!e.estudianteId;
+  }
 
   ngOnInit(): void {
     this.cargar();
@@ -44,7 +54,7 @@ export class Estudiantes implements OnInit {
   cargar(): void {
     this.loading.set(true);
     this.estudianteService.listar(this.page, this.pageSize).subscribe({
-      next: (data) => { this.resultado.set(data); this.loading.set(false); },
+      next: (res) => { this.data.set(res); this.loading.set(false); },
       error: () => this.loading.set(false),
     });
   }
@@ -56,9 +66,12 @@ export class Estudiantes implements OnInit {
   }
 
   abrirNuevo(): void {
-    const ref = this.dialog.open(NuevoEstudianteDialog, { width: '520px' });
-    ref.afterClosed().subscribe(creado => {
-      if (creado) this.cargar();
-    });
+    this.dialog.open(NuevoEstudianteDialog, { width: '520px' })
+      .afterClosed().subscribe(ok => { if (ok) this.cargar(); });
+  }
+
+  completarPerfil(estudiante: EstudianteDto): void {
+    this.dialog.open(ActivarEstudianteDialog, { width: '480px', data: estudiante })
+      .afterClosed().subscribe(ok => { if (ok) this.cargar(); });
   }
 }

@@ -1,12 +1,20 @@
 export interface EstudianteDto {
-  id: string;
   usuarioId: string;
   nombreCompleto: string;
   email: string;
-  numeroDocumento: string;
-  tipoDocumento: string;
-  programaAcademico: string;
-  semestre: number;
+  estudianteId?: string;
+  numeroDocumento?: string;
+  tipoDocumento?: string;
+  programaAcademico?: string;
+  semestre?: number;
+}
+
+export interface PagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 export interface CrearEstudianteRequest {

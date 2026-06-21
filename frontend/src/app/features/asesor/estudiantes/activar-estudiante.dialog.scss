@@ -1,0 +1,35 @@
+.usuario-info {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-row {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+
+  .info-label {
+    font-weight: 600;
+    color: #666;
+    min-width: 60px;
+  }
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-content {
+  min-width: 420px;
+}
