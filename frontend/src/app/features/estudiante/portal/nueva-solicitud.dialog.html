@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Nueva Solicitud</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo de apoyo</mat-label>
+      <mat-select formControlName="tipoApoyo">
+        @for (t of tipos; track t.value) {
+          <mat-option [value]="t.value">{{ t.label }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('tipoApoyo')?.touched && form.get('tipoApoyo')?.hasError('required')) {
+        <mat-error>Selecciona un tipo de apoyo</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Monto solicitado (COP)</mat-label>
+      <input matInput type="number" formControlName="montoSolicitado" min="1">
+      @if (form.get('montoSolicitado')?.touched) {
+        @if (form.get('montoSolicitado')?.hasError('required')) {
+          <mat-error>El monto es obligatorio</mat-error>
+        } @else if (form.get('montoSolicitado')?.hasError('min')) {
+          <mat-error>El monto debe ser mayor a 0</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="descripcion" rows="4"
+        placeholder="Describe el motivo de tu solicitud..."></textarea>
+      @if (form.get('descripcion')?.touched) {
+        @if (form.get('descripcion')?.hasError('required')) {
+          <mat-error>La descripción es obligatoria</mat-error>
+        } @else if (form.get('descripcion')?.hasError('minlength')) {
+          <mat-error>Mínimo 10 caracteres</mat-error>
+        }
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false" type="button">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="enviar()" [disabled]="loading">
+    @if (loading) {
+      <mat-spinner diameter="20" />
+    } @else {
+      Enviar solicitud
+    }
+  </button>
+</mat-dialog-actions>

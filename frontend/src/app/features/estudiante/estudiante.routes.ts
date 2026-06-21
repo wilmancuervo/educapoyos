@@ -5,6 +5,12 @@ export const ESTUDIANTE_ROUTES: Routes = [
   {
     path: '',
     component: MainLayout,
-    children: []
+    children: [
+      { path: '', redirectTo: 'portal', pathMatch: 'full' },
+      {
+        path: 'portal',
+        loadComponent: () => import('./portal/portal').then(m => m.Portal)
+      }
+    ]
   }
 ];

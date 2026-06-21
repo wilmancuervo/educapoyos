@@ -1,0 +1,63 @@
+<div class="portal-container">
+
+  <div class="portal-header">
+    <div>
+      <h1 class="portal-titulo">Mis Solicitudes</h1>
+      <p class="portal-subtitulo">Bienvenido, {{ nombreUsuario }}</p>
+    </div>
+    <button mat-fab extended color="primary" (click)="abrirNuevaSolicitud()">
+      <mat-icon>add</mat-icon>
+      Nueva Solicitud
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (solicitudes().length === 0) {
+    <mat-card class="empty-card">
+      <mat-card-content>
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <p>No tienes solicitudes registradas.</p>
+        <button mat-flat-button color="primary" (click)="abrirNuevaSolicitud()">
+          Crear mi primera solicitud
+        </button>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="solicitudes-grid">
+      @for (s of solicitudes(); track s.id) {
+        <mat-card class="solicitud-card">
+          <mat-card-header>
+            <mat-card-title>{{ s.tipoApoyo }}</mat-card-title>
+            <mat-card-subtitle>{{ s.fechaSolicitud | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+            <span class="estado-chip" [class]="colorEstado(s.estado)">
+              {{ etiquetaEstado(s.estado) }}
+            </span>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="monto">{{ s.montoSolicitado | currency:'COP':'symbol':'1.0-0' }}</p>
+            <p class="descripcion">{{ s.descripcion }}</p>
+            @if (s.nombreAsesor) {
+              <p class="asesor">
+                <mat-icon>person</mat-icon>
+                {{ s.nombreAsesor }}
+              </p>
+            }
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button mat-icon-button
+              (click)="descargarConstancia(s)"
+              matTooltip="Descargar constancia PDF">
+              <mat-icon>download</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>

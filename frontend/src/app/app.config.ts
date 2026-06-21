@@ -3,6 +3,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
@@ -14,6 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor])),
     provideAnimationsAsync(),
-    importProvidersFrom(MatSnackBarModule),
+    importProvidersFrom(MatSnackBarModule, MatDialogModule),
   ]
 };

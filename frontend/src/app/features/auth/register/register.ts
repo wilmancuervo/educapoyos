@@ -51,8 +51,8 @@ export class Register {
   showConfirm = false;
 
   readonly roles = [
-    { label: 'Estudiante', value: 0 },
-    { label: 'Asesor', value: 1 },
+    { label: 'Estudiante', value: 1 },
+    { label: 'Asesor', value: 0 },
   ];
 
   submit(): void {
