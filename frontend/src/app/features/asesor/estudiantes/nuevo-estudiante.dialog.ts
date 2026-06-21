@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { finalize } from 'rxjs';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -17,6 +17,11 @@ function passwordFortaleza(control: AbstractControl): ValidationErrors | null {
   return ok ? null : { passwordDebil: true };
 }
 
+function confirmarPasswordValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.parent?.get('password')?.value;
+  return control.value && control.value !== password ? { passwordMismatch: true } : null;
+}
+
 @Component({
   selector: 'app-nuevo-estudiante-dialog',
   imports: [
@@ -31,7 +36,7 @@ function passwordFortaleza(control: AbstractControl): ValidationErrors | null {
   templateUrl: './nuevo-estudiante.dialog.html',
   styleUrl: './nuevo-estudiante.dialog.scss',
 })
-export class NuevoEstudianteDialog {
+export class NuevoEstudianteDialog implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly estudianteService = inject(EstudianteService);
   private readonly dialogRef = inject(MatDialogRef<NuevoEstudianteDialog>);
@@ -43,11 +48,18 @@ export class NuevoEstudianteDialog {
     nombreCompleto: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(200)]],
     password: ['', [Validators.required, Validators.minLength(8), passwordFortaleza]],
+    confirmarPassword: ['', [Validators.required, confirmarPasswordValidator]],
     numeroDocumento: ['', [Validators.required, Validators.maxLength(20)]],
     tipoDocumento: [null as number | null, Validators.required],
     programaAcademico: ['', [Validators.required, Validators.maxLength(200)]],
     semestre: [null as number | null, [Validators.required, Validators.min(1), Validators.max(12)]],
   });
+
+  ngOnInit(): void {
+    this.form.get('password')!.valueChanges.subscribe(() => {
+      this.form.get('confirmarPassword')!.updateValueAndValidity({ emitEvent: false });
+    });
+  }
 
   enviar(): void {
     if (this.form.invalid) {

@@ -38,6 +38,18 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Confirmar contraseña</mat-label>
+      <input matInput type="password" formControlName="confirmarPassword">
+      @if (form.get('confirmarPassword')?.touched) {
+        @if (form.get('confirmarPassword')?.hasError('required')) {
+          <mat-error>Confirma la contraseña</mat-error>
+        } @else if (form.get('confirmarPassword')?.hasError('passwordMismatch')) {
+          <mat-error>Las contraseñas no coinciden</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Tipo de documento</mat-label>
       <mat-select formControlName="tipoDocumento">
         @for (t of tiposDocumento; track t.value) {
@@ -67,12 +79,15 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Semestre</mat-label>
-      <input matInput type="number" formControlName="semestre" min="1" max="12">
+      <input matInput type="number" formControlName="semestre">
+      <mat-hint>Entre 1 y 12</mat-hint>
       @if (form.get('semestre')?.touched) {
         @if (form.get('semestre')?.hasError('required')) {
           <mat-error>El semestre es obligatorio</mat-error>
-        } @else if (form.get('semestre')?.hasError('min') || form.get('semestre')?.hasError('max')) {
-          <mat-error>Debe estar entre 1 y 12</mat-error>
+        } @else if (form.get('semestre')?.hasError('min')) {
+          <mat-error>El semestre mínimo es 1</mat-error>
+        } @else if (form.get('semestre')?.hasError('max')) {
+          <mat-error>El semestre máximo es 12</mat-error>
         }
       }
     </mat-form-field>
