@@ -10,7 +10,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import jsPDF from 'jspdf';
 import { SolicitudService } from '../../../core/services/solicitud.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { SolicitudDto } from '../../../core/models/solicitud.models';
+import { etiquetaEstado, SolicitudDto } from '../../../core/models/solicitud.models';
 import { NuevaSolicitudDialog } from './nueva-solicitud.dialog';
 
 @Component({
@@ -63,6 +63,8 @@ export class Portal implements OnInit {
     });
   }
 
+  readonly etiquetaEstado = etiquetaEstado;
+
   colorEstado(estado: string): string {
     const colores: Record<string, string> = {
       Pendiente: 'estado-pendiente',
@@ -71,16 +73,6 @@ export class Portal implements OnInit {
       Rechazada: 'estado-rechazada',
     };
     return colores[estado] ?? '';
-  }
-
-  etiquetaEstado(estado: string): string {
-    const etiquetas: Record<string, string> = {
-      Pendiente: 'Pendiente',
-      EnRevision: 'En Revisión',
-      Aprobada: 'Aprobada',
-      Rechazada: 'Rechazada',
-    };
-    return etiquetas[estado] ?? estado;
   }
 
   descargarConstancia(s: SolicitudDto): void {
