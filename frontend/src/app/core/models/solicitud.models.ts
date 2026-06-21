@@ -46,12 +46,6 @@ export const ESTADOS_SOLICITUD = [
   { label: 'Rechazada', value: 'Rechazada' },
 ];
 
-export const ESTADO_COLOR: Record<string, string> = {
-  Pendiente: 'warn',
-  EnRevision: 'accent',
-  Aprobada: 'primary',
-  Rechazada: 'warn',
-};
 
 export interface PagedResult<T> {
   items: T[];

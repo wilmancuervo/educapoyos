@@ -1,6 +1,16 @@
 <mat-toolbar color="primary">
   <mat-icon>school</mat-icon>
   <span class="toolbar-title">EduApoyos</span>
+
+  @if (auth.getRole() === 'Asesor') {
+    <a mat-button routerLink="/asesor/panel" routerLinkActive="nav-active">
+      <mat-icon>dashboard</mat-icon> Panel
+    </a>
+    <a mat-button routerLink="/asesor/estudiantes" routerLinkActive="nav-active">
+      <mat-icon>people</mat-icon> Estudiantes
+    </a>
+  }
+
   <span class="spacer"></span>
   <span class="user-name">{{ auth.getUser()?.nombreCompleto }}</span>
   <button mat-icon-button aria-label="Cerrar sesión" (click)="auth.logout()">

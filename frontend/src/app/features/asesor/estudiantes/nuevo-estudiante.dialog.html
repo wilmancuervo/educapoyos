@@ -1,0 +1,92 @@
+<h2 mat-dialog-title>Registrar Estudiante</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre completo</mat-label>
+      <input matInput formControlName="nombreCompleto">
+      @if (form.get('nombreCompleto')?.touched && form.get('nombreCompleto')?.hasError('required')) {
+        <mat-error>El nombre es obligatorio</mat-error>
+      } @else if (form.get('nombreCompleto')?.touched && form.get('nombreCompleto')?.hasError('minlength')) {
+        <mat-error>Mínimo 3 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput type="email" formControlName="email">
+      @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
+        <mat-error>El correo es obligatorio</mat-error>
+      } @else if (form.get('email')?.touched && form.get('email')?.hasError('email')) {
+        <mat-error>Correo inválido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Contraseña temporal</mat-label>
+      <input matInput type="password" formControlName="password">
+      @if (form.get('password')?.touched) {
+        @if (form.get('password')?.hasError('required')) {
+          <mat-error>La contraseña es obligatoria</mat-error>
+        } @else if (form.get('password')?.hasError('minlength')) {
+          <mat-error>Mínimo 8 caracteres</mat-error>
+        } @else if (form.get('password')?.hasError('passwordDebil')) {
+          <mat-error>Debe contener al menos una mayúscula y un número</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo de documento</mat-label>
+      <mat-select formControlName="tipoDocumento">
+        @for (t of tiposDocumento; track t.value) {
+          <mat-option [value]="t.value">{{ t.label }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('tipoDocumento')?.touched && form.get('tipoDocumento')?.hasError('required')) {
+        <mat-error>Selecciona un tipo de documento</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Número de documento</mat-label>
+      <input matInput formControlName="numeroDocumento">
+      @if (form.get('numeroDocumento')?.touched && form.get('numeroDocumento')?.hasError('required')) {
+        <mat-error>El número de documento es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Programa académico</mat-label>
+      <input matInput formControlName="programaAcademico">
+      @if (form.get('programaAcademico')?.touched && form.get('programaAcademico')?.hasError('required')) {
+        <mat-error>El programa académico es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Semestre</mat-label>
+      <input matInput type="number" formControlName="semestre" min="1" max="12">
+      @if (form.get('semestre')?.touched) {
+        @if (form.get('semestre')?.hasError('required')) {
+          <mat-error>El semestre es obligatorio</mat-error>
+        } @else if (form.get('semestre')?.hasError('min') || form.get('semestre')?.hasError('max')) {
+          <mat-error>Debe estar entre 1 y 12</mat-error>
+        }
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false" type="button">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="enviar()" [disabled]="loading">
+    @if (loading) {
+      <mat-spinner diameter="20" />
+    } @else {
+      Registrar estudiante
+    }
+  </button>
+</mat-dialog-actions>
