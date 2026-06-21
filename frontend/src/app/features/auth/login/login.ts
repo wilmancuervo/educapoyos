@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { finalize } from 'rxjs';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -46,13 +47,13 @@ export class Login {
 
     this.loading = true;
 
-    this.authService.login(this.form.getRawValue() as LoginDto).subscribe({
+    this.authService.login(this.form.getRawValue() as LoginDto).pipe(
+      finalize(() => this.loading = false)
+    ).subscribe({
       next: () => {
-        this.loading = false;
         const rol = this.authService.getRole();
         this.router.navigate([rol === 'Asesor' ? '/asesor' : '/estudiante']);
-      },
-      error: () => { this.loading = false; }
+      }
     });
   }
 }

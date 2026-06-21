@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { finalize } from 'rxjs';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -11,10 +12,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterDto } from '../../../core/models/auth.models';
 
-function passwordsMatch(control: AbstractControl): ValidationErrors | null {
-  const password = control.get('password')?.value;
-  const confirm = control.get('confirmPassword')?.value;
-  return password && confirm && password !== confirm ? { passwordMismatch: true } : null;
+function confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.parent?.get('password')?.value;
+  return control.value && control.value !== password ? { passwordMismatch: true } : null;
 }
 
 @Component({
@@ -33,7 +33,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
-export class Register {
+export class Register implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -41,10 +41,10 @@ export class Register {
   form = this.fb.group({
     nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])/)]],
+    confirmPassword: ['', [Validators.required, confirmPasswordValidator]],
     rol: [null as number | null, Validators.required],
-  }, { validators: passwordsMatch });
+  });
 
   loading = false;
   showPassword = false;
@@ -55,6 +55,12 @@ export class Register {
     { label: 'Asesor', value: 0 },
   ];
 
+  ngOnInit(): void {
+    this.form.get('password')!.valueChanges.subscribe(() => {
+      this.form.get('confirmPassword')!.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -62,15 +68,22 @@ export class Register {
     }
 
     this.loading = true;
+    const raw = this.form.getRawValue();
 
-    const { confirmPassword: _, ...dto } = this.form.getRawValue();
-    this.authService.register(dto as RegisterDto).subscribe({
+    const dto: RegisterDto = {
+      nombreCompleto: raw.nombreCompleto!,
+      email: raw.email!,
+      password: raw.password!,
+      rol: raw.rol!,
+    };
+
+    this.authService.register(dto).pipe(
+      finalize(() => this.loading = false)
+    ).subscribe({
       next: () => {
-        this.loading = false;
         const rol = this.authService.getRole();
         this.router.navigate([rol === 'Asesor' ? '/asesor' : '/estudiante']);
-      },
-      error: () => { this.loading = false; }
+      }
     });
   }
 }

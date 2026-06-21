@@ -9,10 +9,21 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      const problem = error.error as ProblemDetails;
-      const message = problem?.detail ?? 'Ocurrió un error inesperado.';
+      let body: (ProblemDetails & { errors?: Record<string, string[]> }) | null = null;
 
-      notification.error(message);
+      try {
+        body = typeof error.error === 'string' ? JSON.parse(error.error) : error.error;
+      } catch {
+        body = null;
+      }
+
+      let message: string | undefined = body?.detail;
+
+      if (!message && body?.errors) {
+        message = Object.values(body.errors).flat()[0];
+      }
+
+      notification.error(message ?? 'Ocurrió un error inesperado.');
 
       return throwError(() => error);
     })

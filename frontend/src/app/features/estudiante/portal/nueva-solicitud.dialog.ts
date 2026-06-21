@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { finalize } from 'rxjs';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,12 +45,10 @@ export class NuevaSolicitudDialog {
     }
 
     this.loading = true;
-    this.solicitudService.crear(this.form.getRawValue() as any).subscribe({
-      next: () => {
-        this.loading = false;
-        this.dialogRef.close(true);
-      },
-      error: () => { this.loading = false; }
+    this.solicitudService.crear(this.form.getRawValue() as any).pipe(
+      finalize(() => this.loading = false)
+    ).subscribe({
+      next: () => this.dialogRef.close(true)
     });
   }
 }
