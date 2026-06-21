@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <mat-icon>school</mat-icon>
+  <span class="toolbar-title">EduApoyos</span>
+  <span class="spacer"></span>
+  <span class="user-name">{{ auth.getUser()?.nombreCompleto }}</span>
+  <button mat-icon-button aria-label="Cerrar sesión" (click)="auth.logout()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<main class="page-content">
+  <router-outlet />
+</main>

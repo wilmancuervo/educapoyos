@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.toolbar-title {
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+  opacity: 0.9;
+}
+
+.page-content {
+  flex: 1;
+  padding: 1.5rem;
+  background: var(--mat-sys-surface);
+}

@@ -2,6 +2,7 @@
 @import '@fontsource/roboto/300.css';
 @import '@fontsource/roboto/400.css';
 @import '@fontsource/roboto/500.css';
+@import '@fontsource/roboto/700.css';
 @import 'material-icons/iconfont/material-icons.css';
 
 html {
@@ -34,3 +35,13 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+
+.snack-error .mdc-snackbar__surface {
+  background-color: var(--mat-sys-error) !important;
+  color: var(--mat-sys-on-error) !important;
+}
+
+.snack-success .mdc-snackbar__surface {
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+}
