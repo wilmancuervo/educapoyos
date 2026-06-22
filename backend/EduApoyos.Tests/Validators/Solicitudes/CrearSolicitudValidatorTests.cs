@@ -9,7 +9,7 @@ public class CrearSolicitudValidatorTests
     private readonly CrearSolicitudValidator _validator = new();
 
     private static CrearSolicitudCommand ComandoValido() =>
-        new(Guid.NewGuid(), TipoApoyo.Beca, 1_500_000, "Solicitud de apoyo económico para matrícula.");
+        new(Guid.NewGuid(), null, TipoApoyo.Beca, 1_500_000, "Solicitud de apoyo económico para matrícula.");
 
     [Fact]
     public void Validate_DatosValidos_EsValido()

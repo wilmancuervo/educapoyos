@@ -20,7 +20,8 @@ public class CrearSolicitudCommandHandler : IRequestHandler<CrearSolicitudComman
 
     public async Task<Result<SolicitudDto>> Handle(CrearSolicitudCommand request, CancellationToken cancellationToken)
     {
-        var estudiante = await _estudianteRepository.GetByUsuarioIdAsync(request.UsuarioId);
+        var targetId = request.EstudianteUsuarioId ?? request.CallerUsuarioId;
+        var estudiante = await _estudianteRepository.GetByUsuarioIdAsync(targetId);
         if (estudiante is null)
             return Result.Failure<SolicitudDto>(ApplicationErrors.Estudiante.NoEncontrado);
 

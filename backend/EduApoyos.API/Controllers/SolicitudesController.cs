@@ -63,16 +63,12 @@ public class SolicitudesController : AppController
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Crear([FromBody] CrearSolicitudDto dto)
     {
-        var rol = ObtenerRol();
-        var estudianteUsuarioId = rol == Rol.Asesor
-            ? dto.EstudianteUsuarioId ?? Guid.Empty
-            : ObtenerUsuarioId();
-
-        if (estudianteUsuarioId == Guid.Empty)
+        var callerUsuarioId = ObtenerUsuarioId();
+        if (callerUsuarioId == Guid.Empty)
             return IdentityUnauthorized();
 
         var resultado = await _mediator.Send(new CrearSolicitudCommand(
-            estudianteUsuarioId, dto.TipoApoyo, dto.MontoSolicitado, dto.Descripcion));
+            callerUsuarioId, dto.EstudianteUsuarioId, dto.TipoApoyo, dto.MontoSolicitado, dto.Descripcion));
 
         return Match(resultado,
             value => CreatedAtAction(nameof(ObtenerPorId), new { id = value.Id }, value),

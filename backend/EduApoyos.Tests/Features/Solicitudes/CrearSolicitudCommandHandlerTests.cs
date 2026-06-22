@@ -32,7 +32,7 @@ public class CrearSolicitudCommandHandlerTests
                 typeof(SolicitudApoyo).GetProperty("Estudiante")!.SetValue(s, estudiante));
 
         var result = await _handler.Handle(
-            new CrearSolicitudCommand(usuarioId, TipoApoyo.Beca, 1500000, "Solicitud de beca por mérito"), default);
+            new CrearSolicitudCommand(usuarioId, null, TipoApoyo.Beca, 1500000, "Solicitud de beca por mérito"), default);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(TipoApoyo.Beca.ToString(), result.Value.TipoApoyo);
@@ -46,7 +46,7 @@ public class CrearSolicitudCommandHandlerTests
         _estudianteRepo.Setup(r => r.GetByUsuarioIdAsync(It.IsAny<Guid>())).ReturnsAsync((Estudiante?)null);
 
         var result = await _handler.Handle(
-            new CrearSolicitudCommand(Guid.NewGuid(), TipoApoyo.Credito, 2000000, "Solicitud de credito"), default);
+            new CrearSolicitudCommand(Guid.NewGuid(), null, TipoApoyo.Credito, 2000000, "Solicitud de credito"), default);
 
         Assert.True(result.IsFailure);
         Assert.Equal(ApplicationErrors.Estudiante.NoEncontrado.Code, result.Error.Code);
