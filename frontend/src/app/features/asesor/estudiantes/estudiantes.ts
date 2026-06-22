@@ -12,6 +12,7 @@ import { EstudianteService } from '../../../core/services/estudiante.service';
 import { EstudianteDto, PagedResult } from '../../../core/models/estudiante.models';
 import { NuevoEstudianteDialog } from './nuevo-estudiante.dialog';
 import { ActivarEstudianteDialog } from './activar-estudiante.dialog';
+import { NuevaSolicitudDialog } from './nueva-solicitud.dialog';
 
 const PAGED_INICIAL: PagedResult<EstudianteDto> = {
   items: [], total: 0, page: 1, pageSize: 10, totalPages: 0,
@@ -73,5 +74,9 @@ export class Estudiantes implements OnInit {
   completarPerfil(estudiante: EstudianteDto): void {
     this.dialog.open(ActivarEstudianteDialog, { width: '480px', data: estudiante })
       .afterClosed().subscribe(ok => { if (ok) this.cargar(); });
+  }
+
+  nuevaSolicitud(estudiante: EstudianteDto): void {
+    this.dialog.open(NuevaSolicitudDialog, { width: '480px', data: estudiante });
   }
 }
