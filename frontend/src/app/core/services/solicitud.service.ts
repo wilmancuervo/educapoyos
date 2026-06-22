@@ -36,4 +36,8 @@ export class SolicitudService {
   cambiarEstado(id: string, accion: 'aprobar' | 'rechazar', observacion?: string) {
     return this.http.patch<void>(`${this.base}/${id}/estado`, { accion, observacion });
   }
+
+  asignarAsesor(id: string, asesorId: string, observacion?: string) {
+    return this.http.post<void>(`${this.base}/${id}/asesor`, { asesorId, observacion });
+  }
 }

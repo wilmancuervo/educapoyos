@@ -81,6 +81,26 @@
 
     </div>
 
+    @if (puedeTomar) {
+      <mat-card class="acciones-card">
+        <mat-card-header>
+          <mat-card-title>Tomar solicitud</mat-card-title>
+          <mat-card-subtitle>Asígnate como asesor responsable para iniciar la revisión.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="acciones-buttons">
+            <button mat-flat-button color="primary"
+              [disabled]="tomando()"
+              (click)="tomarSolicitud()">
+              @if (tomando()) { <mat-spinner diameter="20" /> }
+              @else { <mat-icon>assignment_ind</mat-icon> }
+              @if (!tomando()) { Tomar solicitud }
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
     @if (puedeGestionar) {
       <mat-card class="acciones-card">
         <mat-card-header>
@@ -99,13 +119,15 @@
               [disabled]="procesando()"
               (click)="cambiarEstado('aprobar')">
               @if (procesando()) { <mat-spinner diameter="20" /> }
-              @else { <mat-icon>check_circle</mat-icon> Aprobar }
+              @else { <mat-icon>check_circle</mat-icon> }
+              @if (!procesando()) { Aprobar }
             </button>
             <button mat-flat-button color="warn"
               [disabled]="procesando()"
               (click)="cambiarEstado('rechazar')">
               @if (procesando()) { <mat-spinner diameter="20" /> }
-              @else { <mat-icon>cancel</mat-icon> Rechazar }
+              @else { <mat-icon>cancel</mat-icon> }
+              @if (!procesando()) { Rechazar }
             </button>
           </div>
         </mat-card-content>

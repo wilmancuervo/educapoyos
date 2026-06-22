@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { SolicitudService } from '../../../core/services/solicitud.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { etiquetaEstado, SolicitudDetalleDto } from '../../../core/models/solicitud.models';
 
@@ -35,6 +36,7 @@ import { etiquetaEstado, SolicitudDetalleDto } from '../../../core/models/solici
 })
 export class Detalle implements OnInit {
   private readonly solicitudService = inject(SolicitudService);
+  private readonly authService = inject(AuthService);
   private readonly notification = inject(NotificationService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -45,6 +47,7 @@ export class Detalle implements OnInit {
   solicitud = signal<SolicitudDetalleDto | null>(null);
   loading = signal(true);
   procesando = signal(false);
+  tomando = signal(false);
 
   observacionForm = this.fb.group({
     observacion: ['', Validators.maxLength(500)],
@@ -55,6 +58,22 @@ export class Detalle implements OnInit {
     this.solicitudService.obtenerDetalle(id).subscribe({
       next: (data) => { this.solicitud.set(data); this.loading.set(false); },
       error: () => this.loading.set(false),
+    });
+  }
+
+  tomarSolicitud(): void {
+    const id = this.solicitud()?.id;
+    const asesorId = this.authService.getUser()?.sub;
+    if (!id || !asesorId) return;
+
+    this.tomando.set(true);
+    this.solicitudService.asignarAsesor(id, asesorId, 'Solicitud tomada para revisión.').pipe(
+      finalize(() => this.tomando.set(false))
+    ).subscribe({
+      next: () => {
+        this.notification.success('Solicitud tomada. Ahora está En Revisión.');
+        this.solicitudService.obtenerDetalle(id).subscribe(data => this.solicitud.set(data));
+      }
     });
   }
 
@@ -80,8 +99,11 @@ export class Detalle implements OnInit {
     this.router.navigate(['/asesor/panel']);
   }
 
+  get puedeTomar(): boolean {
+    return this.solicitud()?.estado === 'Pendiente';
+  }
+
   get puedeGestionar(): boolean {
-    const estado = this.solicitud()?.estado;
-    return estado === 'Pendiente' || estado === 'EnRevision';
+    return this.solicitud()?.estado === 'EnRevision';
   }
 }
