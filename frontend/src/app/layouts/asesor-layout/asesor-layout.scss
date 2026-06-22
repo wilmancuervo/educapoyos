@@ -1,0 +1,134 @@
+:host {
+  display: flex;
+  height: 100vh;
+}
+
+.sidenav-container {
+  flex: 1;
+}
+
+.sidenav {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  background: #1a237e;
+  color: white;
+}
+
+.sidenav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px 16px;
+
+  .brand-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: white;
+  }
+
+  .brand-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+}
+
+mat-divider {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.nav-section-label {
+  padding: 16px 16px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+mat-nav-list {
+  flex: 1;
+  padding-top: 4px;
+
+  a[mat-list-item] {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    margin: 2px 8px;
+
+    mat-icon {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+
+      mat-icon {
+        color: white;
+      }
+    }
+
+    &.nav-active {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+
+      mat-icon {
+        color: white;
+      }
+    }
+  }
+}
+
+.sidenav-footer {
+  padding: 8px 0 12px;
+
+  .footer-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+
+    mat-icon {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-user-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .logout-btn {
+    width: calc(100% - 16px);
+    margin: 0 8px;
+    color: rgba(255, 255, 255, 0.7);
+    justify-content: flex-start;
+
+    &:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.mobile-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.page-content {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100%;
+}

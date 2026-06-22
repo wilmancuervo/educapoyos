@@ -1,0 +1,66 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    class="sidenav">
+
+    <div class="sidenav-brand">
+      <mat-icon class="brand-icon">school</mat-icon>
+      <span class="brand-title">EduApoyos</span>
+    </div>
+
+    <mat-divider />
+
+    <mat-nav-list>
+      <div class="nav-section-label">Solicitudes</div>
+      <a mat-list-item
+        routerLink="/asesor/panel"
+        routerLinkActive="nav-active"
+        (click)="cerrarSiMovil()">
+        <mat-icon matListItemIcon>assignment</mat-icon>
+        <span matListItemTitle>Panel</span>
+      </a>
+
+      <div class="nav-section-label">Usuarios</div>
+      <a mat-list-item
+        routerLink="/asesor/estudiantes"
+        routerLinkActive="nav-active"
+        (click)="cerrarSiMovil()">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <span matListItemTitle>Estudiantes</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-divider />
+      <div class="footer-user">
+        <mat-icon>account_circle</mat-icon>
+        <span class="footer-user-name">{{ auth.getUser()?.nombreCompleto }}</span>
+      </div>
+      <button mat-button class="logout-btn" (click)="auth.logout()">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
+      </button>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    @if (isMobile()) {
+      <mat-toolbar color="primary" class="mobile-toolbar">
+        <button mat-icon-button (click)="sidenav.toggle()" aria-label="Menú">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>EduApoyos</span>
+      </mat-toolbar>
+    }
+
+    <main class="page-content">
+      <router-outlet />
+    </main>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

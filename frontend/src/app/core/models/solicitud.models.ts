@@ -14,7 +14,7 @@ export interface SolicitudDto {
 export interface HistorialEstadoDto {
   estadoAnterior: string;
   estadoNuevo: string;
-  observacion: string;
+  observacion: string | null;
   nombreUsuario: string;
   fechaCambio: string;
 }
@@ -46,9 +46,38 @@ export const ESTADOS_SOLICITUD = [
   { label: 'Rechazada', value: 'Rechazada' },
 ];
 
-export const ESTADO_COLOR: Record<string, string> = {
-  Pendiente: 'warn',
-  EnRevision: 'accent',
-  Aprobada: 'primary',
-  Rechazada: 'warn',
+
+export interface PagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface FiltrosSolicitud {
+  page: number;
+  pageSize: number;
+  estado?: number | null;
+  tipo?: number | null;
+  desde?: string | null;
+  hasta?: string | null;
+}
+
+export const ESTADOS_FILTRO = [
+  { label: 'Pendiente', value: 0 },
+  { label: 'En Revisión', value: 1 },
+  { label: 'Aprobada', value: 2 },
+  { label: 'Rechazada', value: 3 },
+];
+
+const ETIQUETAS_ESTADO: Record<string, string> = {
+  Pendiente: 'Pendiente',
+  EnRevision: 'En Revisión',
+  Aprobada: 'Aprobada',
+  Rechazada: 'Rechazada',
 };
+
+export function etiquetaEstado(estado: string): string {
+  return ETIQUETAS_ESTADO[estado] ?? estado;
+}
