@@ -32,7 +32,8 @@ public class AsignarAsesorCommandHandlerTests
             new AsignarAsesorCommand(solicitud.Id, asesorId, Guid.NewGuid(), "Asignado para revisión"), default);
 
         Assert.True(result.IsSuccess);
-        _solicitudRepo.Verify(r => r.Update(solicitud), Times.Once);
+        _solicitudRepo.Verify(r => r.AddHistorialAsync(It.IsAny<HistorialEstado>()), Times.Once);
+        _solicitudRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
     }
 
     [Fact]

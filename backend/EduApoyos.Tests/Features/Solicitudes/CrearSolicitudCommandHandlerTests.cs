@@ -52,4 +52,24 @@ public class CrearSolicitudCommandHandlerTests
         Assert.Equal(ApplicationErrors.Estudiante.NoEncontrado.Code, result.Error.Code);
         _solicitudRepo.Verify(r => r.AddAsync(It.IsAny<SolicitudApoyo>()), Times.Never);
     }
+
+    [Fact]
+    public async Task Handle_AsesorCreaParaEstudiante_UsaEstudianteUsuarioId()
+    {
+        var callerAsesorId = Guid.NewGuid();
+        var estudianteUsuarioId = Guid.NewGuid();
+        var estudiante = DomainBuilders.BuildEstudiante(estudianteUsuarioId);
+
+        _estudianteRepo.Setup(r => r.GetByUsuarioIdAsync(estudianteUsuarioId)).ReturnsAsync(estudiante);
+        _solicitudRepo.Setup(r => r.AddAsync(It.IsAny<SolicitudApoyo>()))
+            .Callback<SolicitudApoyo>(s =>
+                typeof(SolicitudApoyo).GetProperty("Estudiante")!.SetValue(s, estudiante));
+
+        var result = await _handler.Handle(
+            new CrearSolicitudCommand(callerAsesorId, estudianteUsuarioId, TipoApoyo.Credito, 2000000, "Credito para el estudiante"), default);
+
+        Assert.True(result.IsSuccess);
+        _estudianteRepo.Verify(r => r.GetByUsuarioIdAsync(estudianteUsuarioId), Times.Once);
+        _estudianteRepo.Verify(r => r.GetByUsuarioIdAsync(callerAsesorId), Times.Never);
+    }
 }
