@@ -136,16 +136,4 @@ public class SolicitudesController : AppController
         return Match(resultado, NoContent, BadRequestError);
     }
 
-    private Guid ObtenerUsuarioId()
-    {
-        var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
-                 ?? User.FindFirst("sub");
-        return claim is not null && Guid.TryParse(claim.Value, out var id) ? id : Guid.Empty;
-    }
-
-    private Rol ObtenerRol()
-    {
-        var claim = User.FindFirst("role");
-        return claim is not null && Enum.TryParse<Rol>(claim.Value, out var rol) ? rol : Rol.Estudiante;
-    }
 }

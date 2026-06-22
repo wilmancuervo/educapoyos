@@ -74,10 +74,4 @@ public class EstudiantesController : AppController
         return Match(resultado, Ok, NotFoundError);
     }
 
-    private Guid ObtenerUsuarioId()
-    {
-        var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
-                 ?? User.FindFirst("sub");
-        return claim is not null && Guid.TryParse(claim.Value, out var id) ? id : Guid.Empty;
-    }
 }
