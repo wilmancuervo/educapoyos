@@ -28,6 +28,7 @@ export interface SolicitudDetalleDto extends SolicitudDto {
 }
 
 export interface CrearSolicitudRequest {
+  estudianteUsuarioId?: string;
   tipoApoyo: number;
   montoSolicitado: number;
   descripcion: string;
