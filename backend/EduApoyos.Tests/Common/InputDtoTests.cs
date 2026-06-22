@@ -49,7 +49,7 @@ public class InputDtoTests
     {
         var dto = new CrearSolicitudDto
         {
-            EstudianteId = Guid.NewGuid(),
+            EstudianteUsuarioId = Guid.NewGuid(),
             TipoApoyo = TipoApoyo.Beca,
             MontoSolicitado = 1500000,
             Descripcion = "Solicitud de prueba"

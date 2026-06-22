@@ -63,12 +63,16 @@ public class SolicitudesController : AppController
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Crear([FromBody] CrearSolicitudDto dto)
     {
-        var usuarioId = ObtenerUsuarioId();
-        if (usuarioId == Guid.Empty)
+        var rol = ObtenerRol();
+        var estudianteUsuarioId = rol == Rol.Asesor
+            ? dto.EstudianteUsuarioId ?? Guid.Empty
+            : ObtenerUsuarioId();
+
+        if (estudianteUsuarioId == Guid.Empty)
             return IdentityUnauthorized();
 
         var resultado = await _mediator.Send(new CrearSolicitudCommand(
-            usuarioId, dto.TipoApoyo, dto.MontoSolicitado, dto.Descripcion));
+            estudianteUsuarioId, dto.TipoApoyo, dto.MontoSolicitado, dto.Descripcion));
 
         return Match(resultado,
             value => CreatedAtAction(nameof(ObtenerPorId), new { id = value.Id }, value),
@@ -132,16 +136,4 @@ public class SolicitudesController : AppController
         return Match(resultado, NoContent, BadRequestError);
     }
 
-    private Guid ObtenerUsuarioId()
-    {
-        var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
-                 ?? User.FindFirst("sub");
-        return claim is not null && Guid.TryParse(claim.Value, out var id) ? id : Guid.Empty;
-    }
-
-    private Rol ObtenerRol()
-    {
-        var claim = User.FindFirst("role");
-        return claim is not null && Enum.TryParse<Rol>(claim.Value, out var rol) ? rol : Rol.Estudiante;
-    }
 }
