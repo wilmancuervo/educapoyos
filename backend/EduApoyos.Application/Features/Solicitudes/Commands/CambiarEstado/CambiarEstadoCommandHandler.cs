@@ -34,9 +34,8 @@ public class CambiarEstadoCommandHandler : IRequestHandler<CambiarEstadoCommand,
             return resultado;
 
         var historial = new HistorialEstado(solicitud.Id, request.AsesorId, estadoAnterior, solicitud.Estado, request.Observacion);
-        solicitud.Historial.Add(historial);
+        await _solicitudRepository.AddHistorialAsync(historial);
 
-        _solicitudRepository.Update(solicitud);
         await _solicitudRepository.SaveChangesAsync();
 
         return Result.Success();

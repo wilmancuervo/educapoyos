@@ -26,6 +26,9 @@ public class SolicitudApoyoRepository : Repository<SolicitudApoyo>, ISolicitudAp
             .OrderByDescending(s => s.FechaSolicitud)
             .ToListAsync();
 
+    public async Task AddHistorialAsync(HistorialEstado historial) =>
+        await _context.Set<HistorialEstado>().AddAsync(historial);
+
     public async Task<(IEnumerable<SolicitudApoyo> Items, int Total)> GetPagedAsync(
         int page,
         int pageSize,

@@ -7,23 +7,19 @@ namespace EduApoyos.Tests.Features.Estudiantes;
 
 public class ListarEstudiantesQueryHandlerTests
 {
-    private readonly Mock<IEstudianteRepository> _estudianteRepo = new();
+    private readonly Mock<IUsuarioRepository> _usuarioRepo = new();
     private readonly ListarEstudiantesQueryHandler _handler;
 
     public ListarEstudiantesQueryHandlerTests()
     {
-        _handler = new ListarEstudiantesQueryHandler(_estudianteRepo.Object);
+        _handler = new ListarEstudiantesQueryHandler(_usuarioRepo.Object);
     }
 
     [Fact]
     public async Task Handle_ConEstudiantes_RetornaListaPaginada()
     {
-        var estudiantes = new List<Estudiante>
-        {
-            DomainBuilders.BuildEstudiante(),
-            DomainBuilders.BuildEstudiante()
-        };
-        _estudianteRepo.Setup(r => r.GetPagedAsync(1, 10)).ReturnsAsync((estudiantes, 2));
+        var usuarios = new List<Usuario> { DomainBuilders.BuildUsuario(), DomainBuilders.BuildUsuario() };
+        _usuarioRepo.Setup(r => r.GetEstudiantesPagedAsync(1, 10)).ReturnsAsync((usuarios, 2));
 
         var result = await _handler.Handle(new ListarEstudiantesQuery(1, 10), default);
 
@@ -36,7 +32,7 @@ public class ListarEstudiantesQueryHandlerTests
     [Fact]
     public async Task Handle_SinEstudiantes_RetornaResultadoVacio()
     {
-        _estudianteRepo.Setup(r => r.GetPagedAsync(1, 10)).ReturnsAsync((new List<Estudiante>(), 0));
+        _usuarioRepo.Setup(r => r.GetEstudiantesPagedAsync(1, 10)).ReturnsAsync((new List<Usuario>(), 0));
 
         var result = await _handler.Handle(new ListarEstudiantesQuery(1, 10), default);
 
@@ -47,8 +43,8 @@ public class ListarEstudiantesQueryHandlerTests
     [Fact]
     public async Task Handle_SegundaPagina_RetornaMetadatosDePaginaCorrectos()
     {
-        var estudiantes = new List<Estudiante> { DomainBuilders.BuildEstudiante() };
-        _estudianteRepo.Setup(r => r.GetPagedAsync(2, 5)).ReturnsAsync((estudiantes, 6));
+        var usuarios = new List<Usuario> { DomainBuilders.BuildUsuario() };
+        _usuarioRepo.Setup(r => r.GetEstudiantesPagedAsync(2, 5)).ReturnsAsync((usuarios, 6));
 
         var result = await _handler.Handle(new ListarEstudiantesQuery(2, 5), default);
 

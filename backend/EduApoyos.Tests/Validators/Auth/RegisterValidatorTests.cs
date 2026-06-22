@@ -1,4 +1,4 @@
-using EduApoyos.Application.DTOs.Auth;
+using EduApoyos.Application.Features.Auth.Commands.Register;
 using EduApoyos.Application.Validators.Auth;
 using EduApoyos.Domain.Enums;
 
@@ -8,18 +8,13 @@ public class RegisterValidatorTests
 {
     private readonly RegisterValidator _validator = new();
 
-    private static RegisterDto DtoValido() => new()
-    {
-        NombreCompleto = "Juan Pérez",
-        Email = "juan@test.com",
-        Password = "Segura123",
-        Rol = Rol.Estudiante
-    };
+    private static RegisterCommand ComandoValido() =>
+        new("Juan Pérez", "juan@test.com", "Segura123", Rol.Estudiante);
 
     [Fact]
     public void Validate_DatosValidos_EsValido()
     {
-        var result = _validator.Validate(DtoValido());
+        var result = _validator.Validate(ComandoValido());
 
         Assert.True(result.IsValid);
     }
@@ -27,96 +22,88 @@ public class RegisterValidatorTests
     [Fact]
     public void Validate_NombreCompletoVacio_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.NombreCompleto = string.Empty;
+        var cmd = ComandoValido() with { NombreCompleto = string.Empty };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.NombreCompleto));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.NombreCompleto));
     }
 
     [Fact]
     public void Validate_NombreCompletoExcedeMaximo_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.NombreCompleto = new string('A', 151);
+        var cmd = ComandoValido() with { NombreCompleto = new string('A', 151) };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.NombreCompleto));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.NombreCompleto));
     }
 
     [Fact]
     public void Validate_EmailVacio_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.Email = string.Empty;
+        var cmd = ComandoValido() with { Email = string.Empty };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Email));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Email));
     }
 
     [Fact]
     public void Validate_EmailFormatoIncorrecto_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.Email = "no-es-email";
+        var cmd = ComandoValido() with { Email = "no-es-email" };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Email));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Email));
     }
 
     [Fact]
     public void Validate_PasswordSinMayuscula_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.Password = "sinmayuscula1";
+        var cmd = ComandoValido() with { Password = "sinmayuscula1" };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Password));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Password));
     }
 
     [Fact]
     public void Validate_PasswordSinNumero_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.Password = "SinNumeroAqui";
+        var cmd = ComandoValido() with { Password = "SinNumeroAqui" };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Password));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Password));
     }
 
     [Fact]
     public void Validate_PasswordMenorDe8Caracteres_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.Password = "Cor1";
+        var cmd = ComandoValido() with { Password = "Cor1" };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Password));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Password));
     }
 
     [Fact]
     public void Validate_RolFueraDeEnum_EsInvalido()
     {
-        var dto = DtoValido();
-        dto.Rol = (Rol)999;
+        var cmd = ComandoValido() with { Rol = (Rol)999 };
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Rol));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Rol));
     }
 }

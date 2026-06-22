@@ -141,7 +141,7 @@ public class SolicitudesController : AppController
 
     private Rol ObtenerRol()
     {
-        var claim = User.FindFirst(System.Security.Claims.ClaimTypes.Role);
+        var claim = User.FindFirst("role");
         return claim is not null && Enum.TryParse<Rol>(claim.Value, out var rol) ? rol : Rol.Estudiante;
     }
 }

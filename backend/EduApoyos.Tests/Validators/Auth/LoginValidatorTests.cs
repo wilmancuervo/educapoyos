@@ -1,4 +1,4 @@
-using EduApoyos.Application.DTOs.Auth;
+using EduApoyos.Application.Features.Auth.Commands.Login;
 using EduApoyos.Application.Validators.Auth;
 
 namespace EduApoyos.Tests.Validators.Auth;
@@ -10,9 +10,9 @@ public class LoginValidatorTests
     [Fact]
     public void Validate_DatosValidos_EsValido()
     {
-        var dto = new LoginDto { Email = "usuario@test.com", Password = "secreto" };
+        var cmd = new LoginCommand("usuario@test.com", "secreto");
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.True(result.IsValid);
     }
@@ -20,33 +20,33 @@ public class LoginValidatorTests
     [Fact]
     public void Validate_EmailVacio_EsInvalido()
     {
-        var dto = new LoginDto { Email = string.Empty, Password = "secreto" };
+        var cmd = new LoginCommand(string.Empty, "secreto");
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Email));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Email));
     }
 
     [Fact]
     public void Validate_EmailFormatoIncorrecto_EsInvalido()
     {
-        var dto = new LoginDto { Email = "no-es-un-email", Password = "secreto" };
+        var cmd = new LoginCommand("no-es-un-email", "secreto");
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Email));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Email));
     }
 
     [Fact]
     public void Validate_PasswordVacio_EsInvalido()
     {
-        var dto = new LoginDto { Email = "usuario@test.com", Password = string.Empty };
+        var cmd = new LoginCommand("usuario@test.com", string.Empty);
 
-        var result = _validator.Validate(dto);
+        var result = _validator.Validate(cmd);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(dto.Password));
+        Assert.Contains(result.Errors, e => e.PropertyName == nameof(cmd.Password));
     }
 }

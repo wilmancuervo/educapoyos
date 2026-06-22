@@ -37,9 +37,8 @@ public class AsignarAsesorCommandHandler : IRequestHandler<AsignarAsesorCommand,
             return resultado;
 
         var historial = new HistorialEstado(solicitud.Id, request.UsuarioQueAsignaId, estadoAnterior, solicitud.Estado, request.Observacion);
-        solicitud.Historial.Add(historial);
+        await _solicitudRepository.AddHistorialAsync(historial);
 
-        _solicitudRepository.Update(solicitud);
         await _solicitudRepository.SaveChangesAsync();
 
         return Result.Success();

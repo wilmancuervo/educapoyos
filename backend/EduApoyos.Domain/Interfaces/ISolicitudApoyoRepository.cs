@@ -14,4 +14,5 @@ public interface ISolicitudApoyoRepository : IRepository<SolicitudApoyo>
         TipoApoyo? tipo = null,
         DateTime? desde = null,
         DateTime? hasta = null);
+    Task AddHistorialAsync(HistorialEstado historial);
 }

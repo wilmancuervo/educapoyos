@@ -7,25 +7,23 @@ namespace EduApoyos.Application.Features.Estudiantes.Queries.ListarEstudiantes;
 
 public class ListarEstudiantesQueryHandler : IRequestHandler<ListarEstudiantesQuery, PagedResultDto<EstudianteDto>>
 {
-    private readonly IEstudianteRepository _estudianteRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
 
-    public ListarEstudiantesQueryHandler(IEstudianteRepository estudianteRepository)
+    public ListarEstudiantesQueryHandler(IUsuarioRepository usuarioRepository)
     {
-        _estudianteRepository = estudianteRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
     public async Task<PagedResultDto<EstudianteDto>> Handle(ListarEstudiantesQuery request, CancellationToken cancellationToken)
     {
-        var (items, total) = await _estudianteRepository.GetPagedAsync(request.Page, request.PageSize);
-
-        var dtos = items.Select(EstudianteDto.FromEntity);
+        var (items, total) = await _usuarioRepository.GetEstudiantesPagedAsync(request.Page, request.PageSize);
 
         return new PagedResultDto<EstudianteDto>
         {
-            Items = dtos,
+            Items = items.Select(EstudianteDto.FromUsuario),
             Total = total,
             Page = request.Page,
-            PageSize = request.PageSize
+            PageSize = request.PageSize,
         };
     }
 }
