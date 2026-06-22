@@ -14,10 +14,9 @@
 
 # Cobertura de código
 coveragereport/
+coverage/
 **/TestResults/
 
-# Documentos test
-docs/
 
 # Secretos y configuración local
 **/appsettings.Local.json

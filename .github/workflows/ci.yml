@@ -1,0 +1,39 @@
+name: CI - EduApoyos
+
+on:
+  push:
+    branches: [ main, feature/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build, Test & Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restaurar dependencias
+        run: dotnet restore backend/EduApoyos.sln
+
+      - name: Compilar en modo Release
+        run: dotnet build backend/EduApoyos.sln --no-restore -c Release
+
+      - name: Ejecutar pruebas unitarias
+        run: dotnet test backend/EduApoyos.sln --no-build -c Release --collect:"XPlat Code Coverage" --results-directory ./coverage
+
+      - name: Publicar artefacto de la API
+        run: dotnet publish backend/EduApoyos.API/EduApoyos.API.csproj --no-build -c Release -o ./publish
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: educapoyos-api
+          path: ./publish
